@@ -80,25 +80,34 @@ const game = {
   }
 };
 
-game.platform = {
-  x: 300,
-  y: 300,
-  velocity: 6,
-  dx: 0,
-  move: function() {
-    this.x += this.dx;
-  },
-  stop: function() {
-    this.dx = 0;
-  }
-};
-
 game.ball = {
   width: 22,
   height: 22,
   frame: 0,
   x: 340,
   y: 278
+};
+
+game.platform = {
+  x: 300,
+  y: 300,
+  velocity: 6,
+  dx: 0,
+  ball: game.ball,
+  move: function() {
+    this.x += this.dx;
+
+    if (this.ball) {
+      this.ball.x += this.dx;
+    }
+  },
+  stop: function() {
+    this.dx = 0;
+
+    if (this.ball) {
+      this.ball.dx = 0;
+    }
+  }
 };
 
 window.addEventListener('load', function() {
