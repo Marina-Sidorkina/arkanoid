@@ -1,13 +1,17 @@
 const game = {
   width: 640,
   height: 360,
+  rows: 4,
+  cols: 8,
+  blocks: [],
   ctx: undefined,
   platform: undefined,
   ball: undefined,
   sprites: {
     background: undefined,
     platform: undefined,
-    ball: undefined
+    ball: undefined,
+    block: undefined
   },
   init: function() {
     const canvas = document.getElementById('mycanvas');
@@ -19,9 +23,22 @@ const game = {
       this.sprites[key].src = `images/${key}.png`;
     }
   },
+  create: function() {
+    for(let row = 0; row < this.rows; row++) {
+      for(let col = 0; col < this.cols; col++) {
+        this.blocks.push({
+          x: 68 * col + 50,
+          y: 38 * row + 35,
+          width: 64,
+          height: 32
+        });
+      }
+    }
+  },
   start: function() {
     this.init();
     this.load();
+    this.create();
     this.run();
   },
   render: function() {
@@ -29,6 +46,10 @@ const game = {
     this.ctx.drawImage(this.sprites.background, 0, 0);
     this.ctx.drawImage(this.sprites.platform, this.platform.x, this.platform.y);
     this.ctx.drawImage(this.sprites.ball, this.ball.width * this.ball.frame, 0, this.ball.width, this.ball.height, this.ball.x, this.ball.y, this.ball.width, this.ball.height);
+
+    this.blocks.forEach(element => {
+      this.ctx.drawImage(this.sprites.block, element.x, element.y);
+    });
   },
   run: function() {
     this.render();
