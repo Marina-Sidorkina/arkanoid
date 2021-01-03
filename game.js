@@ -16,6 +16,20 @@ const game = {
   init: function() {
     const canvas = document.getElementById('mycanvas');
     this.ctx = canvas.getContext('2d');
+
+    window.addEventListener('keydown', function(evt) {
+      if (evt.keyCode == 37) {
+        game.platform.dx = -game.platform.velocity;
+      } else if (evt.keyCode == 39) {
+        game.platform.dx = game.platform.velocity;
+      }
+    });
+
+    window.addEventListener('keyup', function(evt) {
+      if (evt.keyCode == 37 || evt.keyCode == 39) {
+        game.platform.stop();
+      }
+    });
   },
   load: function() {
     for(let key in this.sprites) {
@@ -51,7 +65,13 @@ const game = {
       this.ctx.drawImage(this.sprites.block, element.x, element.y);
     });
   },
+  update: function() {
+    if (this.platform.dx) {
+      this.platform.move();
+    }
+  },
   run: function() {
+    this.update();
     this.render();
 
     window.requestAnimationFrame(function() {
@@ -62,7 +82,15 @@ const game = {
 
 game.platform = {
   x: 300,
-  y: 300
+  y: 300,
+  velocity: 6,
+  dx: 0,
+  move: function() {
+    this.x += this.dx;
+  },
+  stop: function() {
+    this.dx = 0;
+  }
 };
 
 game.ball = {
