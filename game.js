@@ -46,7 +46,8 @@ const game = {
           x: 68 * col + 50,
           y: 38 * row + 35,
           width: 64,
-          height: 32
+          height: 32,
+          isAlive: true
         });
       }
     }
@@ -64,7 +65,9 @@ const game = {
     this.ctx.drawImage(this.sprites.ball, this.ball.width * this.ball.frame, 0, this.ball.width, this.ball.height, this.ball.x, this.ball.y, this.ball.width, this.ball.height);
 
     this.blocks.forEach(element => {
-      this.ctx.drawImage(this.sprites.block, element.x, element.y);
+      if (element.isAlive) {
+        this.ctx.drawImage(this.sprites.block, element.x, element.y);
+      }
     });
   },
   update: function() {
@@ -75,6 +78,14 @@ const game = {
     if (this.ball.dx || this.ball.dy) {
       this.ball.move();
     }
+
+    this.blocks.forEach(element => {
+      if (element.isAlive) {
+        if (this.ball.collide(element)) {
+          this.ball.bumpBlock(element);
+        }
+      }
+    });
   },
   run: function() {
     this.update();
@@ -102,6 +113,23 @@ game.ball = {
   jump: function() {
     this.dy = -this.velocity;
     this.dx = -this.velocity;
+  },
+  collide: function(element) {
+    let x = this.x + this.dx;
+    let y = this.y + this.dy;
+
+    if(x + this.width > element.x &&
+      x < element.x + element.width &&
+      y + this.height > element.y &&
+      y < element.y + element.height) {
+        return true;
+    }
+
+    return false;
+  },
+  bumpBlock: function(block) {
+    this.dy *= -1;
+    block.isAlive = false;
   }
 };
 
