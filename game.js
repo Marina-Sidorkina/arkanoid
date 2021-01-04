@@ -22,6 +22,8 @@ const game = {
         game.platform.dx = -game.platform.velocity;
       } else if (evt.keyCode == 39) {
         game.platform.dx = game.platform.velocity;
+      } else if (evt.keyCode == 32) {
+        game.platform.releaseBall();
       }
     });
 
@@ -69,6 +71,10 @@ const game = {
     if (this.platform.dx) {
       this.platform.move();
     }
+
+    if (this.ball.dx || this.ball.dy) {
+      this.ball.move();
+    }
   },
   run: function() {
     this.update();
@@ -85,7 +91,18 @@ game.ball = {
   height: 22,
   frame: 0,
   x: 340,
-  y: 278
+  y: 278,
+  dx: 0,
+  dy: 0,
+  velocity: 3,
+  move: function() {
+    this.x += this.dx;
+    this.y += this.dy;
+  },
+  jump: function() {
+    this.dy = -this.velocity;
+    this.dx = -this.velocity;
+  }
 };
 
 game.platform = {
@@ -94,6 +111,12 @@ game.platform = {
   velocity: 6,
   dx: 0,
   ball: game.ball,
+  releaseBall: function() {
+    if (this.ball) {
+      this.ball.jump();
+      this.ball = false;
+    }
+  },
   move: function() {
     this.x += this.dx;
 
