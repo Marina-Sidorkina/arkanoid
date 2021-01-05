@@ -71,6 +71,10 @@ const game = {
     });
   },
   update: function() {
+    if (this.ball.collide(this.platform)) {
+      this.ball.bumpPlatform();
+    }
+
     if (this.platform.dx) {
       this.platform.move();
     }
@@ -86,6 +90,8 @@ const game = {
         }
       }
     });
+
+    this.ball.checkBounds();
   },
   run: function() {
     this.update();
@@ -94,6 +100,9 @@ const game = {
     window.requestAnimationFrame(function() {
       game.run();
     });
+  },
+  over: function() {
+    console.log('Game Over');
   }
 };
 
@@ -130,6 +139,29 @@ game.ball = {
   bumpBlock: function(block) {
     this.dy *= -1;
     block.isAlive = false;
+  },
+  bumpPlatform: function() {
+    this.dy = -this.velocity;
+  },
+  checkBounds: function() {
+    let x = this.x + this.dx;
+    let y = this.y + this.dy;
+
+    if (x < 0) {
+      this.x = 0;
+      this.dx = this.velocity;
+
+    } else if ((x + this.width) > game.width) {
+      this.x = game.width - this.width;
+      this.dx = -this.velocity;
+
+    } else if (y < 0) {
+      this.y = 0;
+      this.dy = this.velocity;
+
+    } else if ((y + this.height) > game.height) {
+      game.over();
+    }
   }
 };
 
@@ -138,6 +170,8 @@ game.platform = {
   y: 300,
   velocity: 6,
   dx: 0,
+  width: 104,
+  height: 24,
   ball: game.ball,
   releaseBall: function() {
     if (this.ball) {
