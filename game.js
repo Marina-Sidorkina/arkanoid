@@ -18,6 +18,8 @@ const game = {
   init: function() {
     const canvas = document.getElementById('mycanvas');
     this.ctx = canvas.getContext('2d');
+    this.ctx.font = '20px Arial';
+    this.ctx.fillStyle = '#ffffff';
 
     window.addEventListener('keydown', function(evt) {
       if (evt.keyCode == 37) {
@@ -71,6 +73,8 @@ const game = {
         this.ctx.drawImage(this.sprites.block, element.x, element.y);
       }
     });
+
+    this.ctx.fillText("SCORE: " + this.score, 15, this.height - 15);
   },
   update: function() {
     if (this.ball.collide(this.platform)) {
