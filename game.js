@@ -161,9 +161,10 @@ game.ball = {
     block.isAlive = false;
     ++game.score;
 
-    if(game.score >= game.blocks.length) {
+    if(game.score === game.blocks.length) {
       game.over('You Won!');
     }
+
   },
   onTheLeftSide: function(platform) {
     return (this.x + (this.width / 2)) < (platform.x + (platform.width / 2));
