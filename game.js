@@ -128,6 +128,16 @@ game.ball = {
   jump: function() {
     this.dy = -this.velocity;
     this.dx = -this.velocity;
+    this.animate();
+  },
+  animate: function() {
+    setInterval(function() {
+      ++game.ball.frame;
+
+      if (game.ball.frame > 3) {
+        game.ball.frame = 0;
+      }
+    }, 100);
   },
   collide: function(element) {
     let x = this.x + this.dx;
