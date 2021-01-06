@@ -72,7 +72,7 @@ const game = {
   },
   update: function() {
     if (this.ball.collide(this.platform)) {
-      this.ball.bumpPlatform();
+      this.ball.bumpPlatform(this.platform);
     }
 
     if (this.platform.dx) {
@@ -140,8 +140,12 @@ game.ball = {
     this.dy *= -1;
     block.isAlive = false;
   },
-  bumpPlatform: function() {
+  onTheLeftSide: function(platform) {
+    return (this.x + (this.width / 2)) < (platform.x + (platform.width / 2));
+  },
+  bumpPlatform: function(platform) {
     this.dy = -this.velocity;
+    this.dx = this.onTheLeftSide(platform) ? -this.velocity : this.velocity;
   },
   checkBounds: function() {
     let x = this.x + this.dx;
