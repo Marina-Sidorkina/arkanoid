@@ -8,6 +8,7 @@ const game = {
   platform: undefined,
   ball: undefined,
   running: true,
+  score: 0,
   sprites: {
     background: undefined,
     platform: undefined,
@@ -104,9 +105,10 @@ const game = {
       });
     }
   },
-  over: function() {
-    console.log('Game Over');
+  over: function(message) {
+    alert(message);
     this.running = false;
+    window.location.reload();
   }
 };
 
@@ -143,6 +145,11 @@ game.ball = {
   bumpBlock: function(block) {
     this.dy *= -1;
     block.isAlive = false;
+    ++game.score;
+
+    if(game.score >= game.blocks.length) {
+      game.over('You Won!');
+    }
   },
   onTheLeftSide: function(platform) {
     return (this.x + (this.width / 2)) < (platform.x + (platform.width / 2));
@@ -168,7 +175,7 @@ game.ball = {
       this.dy = this.velocity;
 
     } else if ((y + this.height) > game.height) {
-      game.over();
+      game.over('Game Over!');
     }
   }
 };
