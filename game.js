@@ -7,6 +7,7 @@ const game = {
   ctx: undefined,
   platform: undefined,
   ball: undefined,
+  running: true,
   sprites: {
     background: undefined,
     platform: undefined,
@@ -97,12 +98,15 @@ const game = {
     this.update();
     this.render();
 
-    window.requestAnimationFrame(function() {
-      game.run();
-    });
+    if (this.running) {
+      window.requestAnimationFrame(function() {
+        game.run();
+      });
+    }
   },
   over: function() {
     console.log('Game Over');
+    this.running = false;
   }
 };
 
